@@ -1,4 +1,4 @@
-import type { ModelType } from "skinview-utils";
+import { type ModelType, type TextureSource } from "skinview-utils";
 import {
 	BoxGeometry,
 	BufferAttribute,
@@ -10,6 +10,7 @@ import {
 	Object3D,
 	Texture,
 	Vector2,
+	MathUtils
 } from "three";
 
 function setUVs(
@@ -511,5 +512,94 @@ export class PlayerObject extends Group {
 		this.skin.resetJoints();
 		this.cape.rotation.x = CapeDefaultAngle;
 		this.elytra.resetJoints();
+	}
+
+	// New method to load Geo JSON model
+	loadGeoJsonModel(geoJson: any, texture: TextureSource): void {
+		const bones = geoJson["minecraft:geometry"][0].bones;
+		const material = new MeshStandardMaterial({
+			side: FrontSide,
+			color: 0xFF0000,
+		});
+
+		bones.forEach((bone: any) => {
+			const boneGroup = new Group();
+			boneGroup.name = bone.name;
+			if (bone.rotation) {
+				boneGroup.rotation.set(
+					MathUtils.degToRad(bone.rotation[0]),
+					MathUtils.degToRad(bone.rotation[1]),
+					MathUtils.degToRad(bone.rotation[2])
+				);
+			}
+
+			if (bone.cubes) {
+				bone.cubes.forEach((cube: any) => {
+					const geometry = new BoxGeometry(cube.size[0], cube.size[1], cube.size[2]);
+					this.setCubeUVs(geometry, cube.uv);
+					const mesh = new Mesh(geometry, material);
+					mesh.position.set(cube.origin[0] - (cube.size[0] / 2), cube.origin[1] - (cube.size[1] / 2), cube.origin[2] - (cube.size[2] / 2));
+					if (cube.rotation) {
+						mesh.rotation.set(
+							MathUtils.degToRad(cube.rotation[0]),
+							MathUtils.degToRad(cube.rotation[1]),
+							MathUtils.degToRad(cube.rotation[2])
+						);
+					}
+					boneGroup.add(mesh);
+				});
+			}
+
+			if (bone.parent) {
+				switch (bone.parent) {
+					case 'armorHead':
+						this.skin.head.add(boneGroup);
+						break;
+					case 'armorBody':
+						this.skin.body.add(boneGroup);
+						break;
+					case 'bipedBody':
+						this.skin.body.add(boneGroup);
+						break;
+					case 'armorRightArm':
+						this.skin.rightArm.add(boneGroup);
+						break;
+					case 'armorLeftArm':
+						this.skin.leftArm.add(boneGroup);
+						break;
+					case 'armorRightLeg':
+						this.skin.rightLeg.add(boneGroup);
+						break;
+					case 'armorLeftLeg':
+						this.skin.leftLeg.add(boneGroup);
+						break;
+					default:
+						this.skin.getObjectByName(bone.parent)?.add(boneGroup);
+						break;
+				}
+			}
+		});
+	}
+
+	private setCubeUVs(geometry: BoxGeometry, uv: any): void {
+		const uvAttr = geometry.attributes.uv as BufferAttribute;
+		const newUVData: any = [];
+
+		const faces = ["north", "east", "south", "west", "up", "down"];
+		faces.forEach(face => {
+			const faceUV = uv[face];
+			if (faceUV) {
+				const uvArray = [
+					new Vector2(faceUV.uv[0] / 128, 1.0 - faceUV.uv[1] / 128),
+					new Vector2((faceUV.uv[0] + faceUV.uv_size[0]) / 128, 1.0 - faceUV.uv[1] / 128),
+					new Vector2((faceUV.uv[0] + faceUV.uv_size[0]) / 128, 1.0 - (faceUV.uv[1] + faceUV.uv_size[1]) / 128),
+					new Vector2(faceUV.uv[0] / 128, 1.0 - (faceUV.uv[1] + faceUV.uv_size[1]) / 128),
+				];
+				newUVData.push(...uvArray.map(uv => [uv.x, uv.y]).flat());
+			}
+		});
+
+		uvAttr.set(new Float32Array(newUVData));
+		uvAttr.needsUpdate = true;
 	}
 }

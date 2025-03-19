@@ -96,7 +96,7 @@ export interface EarsLoadOptions extends LoadOptions {
 	textureType?: "standalone" | "skin";
 }
 
-export interface SkinViewerOptions {
+export interface GeoSkinViewerOptions {
 	/**
 	 * The canvas where the renderer draws its output.
 	 *
@@ -242,15 +242,15 @@ export interface SkinViewerOptions {
 	 * The name tag to display above the player.
 	 *
 	 * @defaultValue If unspecified, no name tag will be displayed.
-	 * @see {@link SkinViewer.nameTag}
+	 * @see {@link GeoSkinViewer.nameTag}
 	 */
 	nameTag?: NameTagObject | string;
 }
 
 /**
- * The SkinViewer renders the player on a canvas.
+ * The GeoSkinViewer renders the player on a canvas.
  */
-export class SkinViewer {
+export class GeoSkinViewer {
 	/**
 	 * The canvas where the renderer draws its output.
 	 */
@@ -290,6 +290,7 @@ export class SkinViewer {
 	readonly skinCanvas: HTMLCanvasElement;
 	readonly capeCanvas: HTMLCanvasElement;
 	readonly earsCanvas: HTMLCanvasElement;
+	readonly geoModelCanvaces: HTMLCanvasElement[] = [];
 	private skinTexture: Texture | null = null;
 	private capeTexture: Texture | null = null;
 	private earsTexture: Texture | null = null;
@@ -327,7 +328,7 @@ export class SkinViewer {
 
 	private _nameTag: NameTagObject | null = null;
 
-	constructor(options: SkinViewerOptions = {}) {
+	constructor(options: GeoSkinViewerOptions = {}) {
 		this.canvas = options.canvas === undefined ? document.createElement("canvas") : options.canvas;
 
 		this.skinCanvas = document.createElement("canvas");
@@ -843,9 +844,9 @@ export class SkinViewer {
 	 *
 	 * @example
 	 * ```
-	 * skinViewer.nameTag = "hello";
-	 * skinViewer.nameTag = new NameTagObject("hello", { textStyle: "yellow" });
-	 * skinViewer.nameTag = null;
+	 * geoSkinViewer.nameTag = "hello";
+	 * geoSkinViewer.nameTag = new NameTagObject("hello", { textStyle: "yellow" });
+	 * geoSkinViewer.nameTag = null;
 	 * ```
 	 */
 	get nameTag(): NameTagObject | null {

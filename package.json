@@ -1,7 +1,7 @@
 {
-	"name": "skinview3d",
+	"name": "geoskinview3d",
 	"version": "3.1.0",
-	"description": "Three.js powered Minecraft skin viewer",
+	"description": "Three.js powered Minecraft skin and Geckolib model viewer",
 	"main": "libs/skinview3d.js",
 	"type": "module",
 	"scripts": {
@@ -22,10 +22,11 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/bs-community/skinview3d.git"
+		"url": "git+https://github.com/TimLohrer/GeoSkinView3d.git"
 	},
-	"author": "Haowei Wen <yushijinhun@gmail.com> (https://github.com/yushijinhun)",
+	"author": "Tim Lohrer <me@timlohrer.de> (https://github.com/TimLohrer)",
 	"contributors": [
+		"Tim Lohrer <me@timlohrer.de> (https://github.com/TimLohrer)",
 		"Sean Boult <sean@boult.me> (https://github.com/Hacksore)",
 		"Pig Fang <g-plane@hotmail.com> (https://github.com/g-plane)",
 		"printempw <h@prinzeugen.net> (https://github.com/printempw)",
@@ -33,9 +34,9 @@
 	],
 	"license": "MIT",
 	"bugs": {
-		"url": "https://github.com/bs-community/skinview3d/issues"
+		"url": "https://github.com/TimLohrer/GeoSkinView3d/issues"
 	},
-	"homepage": "https://github.com/bs-community/skinview3d",
+	"homepage": "https://github.com/TimLohrer/GeoSkinView3d",
 	"files": [
 		"libs",
 		"bundles",
