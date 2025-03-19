@@ -533,12 +533,15 @@ export class PlayerObject extends Group {
 				);
 			}
 
+			boneGroup.rotateY(MathUtils.degToRad(-90));
+
+
 			if (bone.cubes) {
 				bone.cubes.forEach((cube: any) => {
 					const geometry = new BoxGeometry(cube.size[0], cube.size[1], cube.size[2]);
 					this.setCubeUVs(geometry, cube.uv);
 					const mesh = new Mesh(geometry, material);
-					mesh.position.set(cube.origin[0] - (cube.size[0] / 2), cube.origin[1] - (cube.size[1] / 2), cube.origin[2] - (cube.size[2] / 2));
+					mesh.position.set(cube.origin[0] + 8 - (cube.size[0] / 2), cube.origin[1] - 14, cube.origin[2] + 8 - (cube.size[2] / 2));
 					if (cube.rotation) {
 						mesh.rotation.set(
 							MathUtils.degToRad(cube.rotation[0]),
